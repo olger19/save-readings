@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useReadings } from './hooks/useReadings';
 import Header from './components/Header';
 import StatsDashboard from './components/StatsDashboard';
 import ControlsBar from './components/ControlsBar';
 import ReadingCard from './components/ReadingCard';
 import ReadingModal from './components/ReadingModal';
+import AuthModal from './components/AuthModal';
 import Spinner from './components/Spinner';
 import { AlertCircle, X, BookOpen, Plus } from 'lucide-react';
 
 function App() {
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+
   const {
     filteredReadings,
     loading,
@@ -42,7 +45,10 @@ function App() {
   return (
     <div className="flex flex-col gap-7 w-full max-w-[1200px] mx-auto px-4 py-8 min-h-screen animate-fade-in">
       {/* Header */}
-      <Header onAddClick={openAddModal} />
+      <Header 
+        onAddClick={openAddModal} 
+        onAuthClick={() => setIsAuthOpen(true)} 
+      />
 
       {/* Warnings & Errors */}
       {error && (
@@ -98,7 +104,7 @@ function App() {
         </div>
       )}
 
-      {/* Add / Edit Modal */}
+      {/* Add / Edit Reading Modal */}
       <ReadingModal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -106,6 +112,12 @@ function App() {
         formData={formData}
         onInputChange={handleInputChange}
         onSubmit={saveReading}
+      />
+
+      {/* Login / Register Auth Modal */}
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
       />
     </div>
   );
